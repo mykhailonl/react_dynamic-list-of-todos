@@ -1,5 +1,10 @@
 import { useContext } from 'react';
-import { DispatchContext, Filter, StateContext } from '../../store/Store';
+import {
+  DispatchContext,
+  Filter,
+  FilterValues,
+  StateContext,
+} from '../../store/Store';
 
 export const TodoFilter = () => {
   const dispatch = useContext(DispatchContext);
@@ -15,13 +20,15 @@ export const TodoFilter = () => {
             onChange={event =>
               dispatch({
                 type: 'SET_FILTER',
-                payload: event.target.value as Filter,
+                payload: event.target.value as FilterValues,
               })
             }
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.values(Filter).map(filterValue => (
+              <option value={filterValue} key={filterValue}>
+                {filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -40,6 +47,7 @@ export const TodoFilter = () => {
             })
           }
         />
+
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>

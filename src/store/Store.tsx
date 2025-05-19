@@ -1,16 +1,22 @@
-import { ReactNode, createContext, useEffect, useReducer } from 'react';
+import React, { ReactNode, createContext, useEffect, useReducer } from 'react';
 import { Todo } from '../types/Todo';
 import { getTodos, getUser } from '../api';
 import { User } from '../types/User';
 
-export type Filter = 'all' | 'active' | 'completed';
+export const Filter = {
+  ALL: 'all',
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
+} as const;
+
+export type FilterValues = (typeof Filter)[keyof typeof Filter];
 
 type Action =
   | { type: 'LOAD_ALL_TODOS'; payload: Todo[] }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_SELECTED'; payload: number }
   | { type: 'SET_TARGET_USER'; payload: User | null }
-  | { type: 'SET_FILTER'; payload: Filter }
+  | { type: 'SET_FILTER'; payload: FilterValues }
   | { type: 'SET_QUERY'; payload: string }
   | { type: 'RESET_QUERY' }
   | { type: 'UPDATE_FILTERED_TODOS'; payload: Todo[] };
@@ -23,7 +29,7 @@ interface State {
     todo: Todo[];
   };
   targetUserInfo: User | null;
-  filter: Filter;
+  filter: FilterValues;
   filteredTodos: Todo[];
   query: string;
 }
